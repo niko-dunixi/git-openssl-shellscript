@@ -17,3 +17,6 @@ so it looks like this
 ```
 sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
 ```
+
+Related confluence page:
+https://confluence.overstock.com/display/~paul.baker/Resolving+git+gnutls_handshake%28%29+failed+error
