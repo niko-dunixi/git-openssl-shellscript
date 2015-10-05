@@ -9,6 +9,7 @@ sudo apt-get build-dep git -y
 sudo apt-get install libcurl4-openssl-dev -y
 mkdir -p "/tmp/source-git/"
 cd "/tmp/source-git/"
+sudo apt-add-repository ppa:git-core/ppa
 apt-get source git
 
 # We need to actually go into the git source directory
@@ -19,7 +20,7 @@ pwd
 # This is where we actually change the library from one type to the other.
 sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control
 # Compile time, itself, is long. Skips the tests. Do so at your own peril.
-#sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
+sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
 
 # Build it.
 dpkg-buildpackage -rfakeroot -b
