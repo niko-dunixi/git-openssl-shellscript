@@ -12,8 +12,8 @@ if [ -d "./git" ]; then
   git pull origin master
 else
   git clone http://git.kernel.org/pub/scm/git/git.git
+  cd ./git
 fi
-cd ./git
 
 # This is where we actually change the library from one type to the other.
 #sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control
