@@ -17,10 +17,13 @@ else
   cd ./git
 fi
 
+sudo apt-get remove git -y
+sudo apt-get autoremove -y
+
 make configure
 auto-apt run ./configure --prefix=/usr
 make all doc info
-echo "#define VERSION \"$(date +%s)\"" >> config.log
+echo "#define VERSION \"9:9.9.9-9${USER}0.9\"" >> config.log
 # Builds a package for easy uninstallation. Don't use this
 # for building distribution packages. Purely for local builds.
 sudo checkinstall make install install-doc install-html install-info
