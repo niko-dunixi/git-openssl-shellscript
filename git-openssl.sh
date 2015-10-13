@@ -9,7 +9,7 @@ sudo apt-get build-dep git -y
 sudo apt-get install libcurl4-openssl-dev -y
 mkdir -p "/tmp/source-git/"
 cd "/tmp/source-git/"
-sudo apt-add-repository ppa:git-core/ppa
+#sudo apt-add-repository ppa:git-core/ppa
 apt-get source git
 
 # We need to actually go into the git source directory
