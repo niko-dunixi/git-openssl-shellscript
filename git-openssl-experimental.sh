@@ -24,6 +24,12 @@ sudo apt-get autoremove -y
 make configure
 auto-apt run ./configure --prefix=/usr
 make all doc info
+make test
+if [ $? -ne 0 ]; then
+  echo "TESTS FAILED! HALTING NOW TO PREVENT PROBLEMS"
+  exit 1
+fi
+
 # Builds a package for easy uninstallation. Don't use this
 # for building distribution packages. Purely for local builds.
 sudo checkinstall --pkgversion "9:9.9.9-9${USER}0.9" make install install-doc install-html install-info
