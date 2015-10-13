@@ -4,6 +4,7 @@
 #sudo apt-get install build-essential fakeroot dpkg-dev -y
 #sudo apt-get build-dep git -y
 #sudo apt-get install libcurl4-openssl-dev -y
+sudo apt-get install build-essential dpkg-dev checkinstall -y
 sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev -y
 sudo apt-get install asciidoc xmlto docbook2x -y
 
@@ -23,4 +24,4 @@ fi
 make configure
 ./configure --prefix=/usr
 make all doc info
-sudo make install install-doc install-html install-info
+sudo checkinstall make install install-doc install-html install-info
