@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
+# Places us in the somewhat awkward position of needing git, to get git.
+# In my opinion, it does work better than building from distributed source
+# because there is no need to modify files, just build and install.
+
 # Get the dependencies for git, then get openssl
-#sudo apt-get install build-essential fakeroot dpkg-dev -y
-#sudo apt-get build-dep git -y
-#sudo apt-get install libcurl4-openssl-dev -y
 sudo apt-get install build-essential dpkg-dev checkinstall auto-apt -y
-sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev -y
+sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext libz-dev libssl-dev -y
 sudo apt-get install asciidoc xmlto docbook2x -y
 
 if [ -d "./git" ]; then
@@ -16,12 +17,10 @@ else
   cd ./git
 fi
 
-# This is where we actually change the library from one type to the other.
-#sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control
-# Compile time, itself, is long. Skips the tests. Do so at your own peril.
-#sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
-
 make configure
 auto-apt run ./configure --prefix=/usr
 make all doc info
+echo "#define VERSION \"$(date +%s)\"" >> config.log
+# Builds a package for easy uninstallation. Don't use this
+# for building distribution packages. Purely for local builds.
 sudo checkinstall make install install-doc install-html install-info
