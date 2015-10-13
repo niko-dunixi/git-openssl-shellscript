@@ -4,7 +4,7 @@
 #sudo apt-get install build-essential fakeroot dpkg-dev -y
 #sudo apt-get build-dep git -y
 #sudo apt-get install libcurl4-openssl-dev -y
-sudo apt-get install build-essential dpkg-dev checkinstall -y
+sudo apt-get install build-essential dpkg-dev checkinstall auto-apt -y
 sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev -y
 sudo apt-get install asciidoc xmlto docbook2x -y
 
@@ -22,6 +22,6 @@ fi
 #sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
 
 make configure
-./configure --prefix=/usr
+auto-apt run ./configure --prefix=/usr
 make all doc info
 sudo checkinstall make install install-doc install-html install-info
