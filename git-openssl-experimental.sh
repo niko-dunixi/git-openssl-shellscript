@@ -26,10 +26,15 @@ sudo apt-get autoremove -y
 make configure
 auto-apt run ./configure --prefix=/usr
 make all doc info
-make test
-if [ $? -ne 0 ]; then
-  echo "TESTS FAILED! HALTING NOW TO PREVENT PROBLEMS"
-  exit 1
+if [[ "$@" == "-skiptests" ]]
+then
+  echo "Skipping tests"
+else
+  if [ $? -ne 0 ]; then
+    make test
+    echo "TESTS FAILED! HALTING NOW TO PREVENT PROBLEMS"
+    exit 1
+  fi
 fi
 
 # Builds a package for easy uninstallation. Don't use this

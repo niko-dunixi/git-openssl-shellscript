@@ -25,6 +25,12 @@ pwd
 sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control
 # Compile time, itself, is long. Skips the tests. Do so at your own peril.
 #sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
+if [[ "$@" == "-skiptests" ]]
+then
+  sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
+fi
+
+
 
 # Build it.
 dpkg-buildpackage -rfakeroot -b
