@@ -9,13 +9,15 @@ sudo apt-get install build-essential dpkg-dev checkinstall auto-apt -y
 sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext libz-dev libssl-dev -y
 sudo apt-get install asciidoc xmlto docbook2x -y
 
-if [ -d "./git" ]; then
-  cd ./git
+GIT_DIR="$(pwd)/git"
+
+if [ -d "${GIT_DIR}" ]; then
+  cd "${GIT_DIR}"
   git reset --hard HEAD
   git pull origin master
 else
   git clone http://git.kernel.org/pub/scm/git/git.git
-  cd ./git
+  cd "${GIT_DIR}"
 fi
 
 sudo apt-get remove git -y
@@ -37,11 +39,21 @@ sudo checkinstall --pkgversion "9:9.9.9-9${USER}0.9" make install install-doc in
 # If the installalation was successful, then let's build the keyring
 # integration that is really helpful for securely storing https credentials
 if [ $? -eq 0 ]; then
+  # gnome-keyring stuff
   sudo apt-get install libgnome-keyring-dev -y
-  cd $(find . -type d -name "gnome-keyring")
+  cd $(find "${GIT_DIR}" -type d -name "gnome-keyring")
   echo "" >> Makefile
   echo 'install:$(MAIN)' >> Makefile
   echo '	mv git-credential-gnome-keyring /usr/local/bin' >> Makefile
   sudo checkinstall --pkgname "git-credential-gnome-keyring" --pkgversion "9:9.9.9-9${USER}0.9" --requires git
   git config --global credential.helper "/usr/local/bin/git-credential-gnome-keyring"
+  # bash auto-complete, because it's super helpful.
+  cd $(find "${GIT_DIR}" -type d -name "completion")
+  #if [ ! -d "/etc/bash_completion.d/" ]; then
+  #  sudo mkdir -p "/etc/bash_completion.d"
+  #fi
+  echo "install:" > Makefile
+  echo "	mkdir -p /etc/bash_completion.d" >> Makefile
+  echo "	cp git-completion.bash /etc/bash_completion.d/" >> Makefile
+  sudo checkinstall --pkgname "git-completion" --pkgversion "9:9.9.9-9${USER}0.9" --requires git
 fi
