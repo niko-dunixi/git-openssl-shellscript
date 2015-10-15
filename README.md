@@ -17,4 +17,4 @@ This script is better than the other one, in that it pulls git source code direc
 That being said, it is experimental. Use at your own peril. If things go south, just purge all git and re-install or use the regular shellscript
 
 ## For both scripts
-Compiling and running the tests to ensure functionailty are long. To save time, pass the ```-skiptests``` argument to the script you run. Tests will be skipped and the script will procede without them.
+Compiling and running the tests to ensure functionailty can take a significant portion of time. Pass the ```-skiptests``` argument to the script you run. Tests will be skipped and the script will procede without them.
