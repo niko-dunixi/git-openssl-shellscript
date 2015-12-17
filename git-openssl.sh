@@ -35,5 +35,5 @@ fi
 # Build it.
 dpkg-buildpackage -rfakeroot -b
 
-# Install
-find .. -type f -name "git_*ubuntu*.deb" -exec sudo dpkg -i \{\} \;
+# Store for artifact pick up
+find .. -type f -name "git_*ubuntu*.deb" -exec cp -i {} ./ \;
