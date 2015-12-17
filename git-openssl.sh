@@ -61,9 +61,7 @@ fi
 dpkg-buildpackage -rfakeroot -b
 
 # Install
-if [[ -z $SKIPTESTS ]]
+if [[ -z $SKIPINSTALL ]]
 then 
   find .. -type f -name "git_*ubuntu*.deb" -exec sudo dpkg -i \{\} \;
 fi
-
-
