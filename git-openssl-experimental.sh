@@ -5,7 +5,7 @@
 # because there is no need to modify files, just build and install.
 
 # Get the dependencies for git, then get openssl
-sudo apt-get install build-essential dpkg-dev checkinstall auto-apt -y
+sudo apt-get install git build-essential dpkg-dev checkinstall auto-apt -y
 sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext libz-dev libssl-dev -y
 sudo apt-get install asciidoc xmlto docbook2x -y
 
