@@ -37,7 +37,7 @@ sudo apt-get install build-essential fakeroot dpkg-dev -y
 sudo apt-get build-dep git -y
 sudo apt-get install libcurl4-openssl-dev -y
 if ! grep -q "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-  sudo apt-add-repository ppa:git-core/ppa
+  sudo apt-add-repository ppa:git-core/ppa --yes
 else
   echo "git-core already in ppa"
 fi
