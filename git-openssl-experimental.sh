@@ -30,8 +30,8 @@ if [[ "$@" == "-skiptests" ]]
 then
   echo "Skipping tests"
 else
+  make test
   if [ $? -ne 0 ]; then
-    make test
     echo "TESTS FAILED! HALTING NOW TO PREVENT PROBLEMS"
     exit 1
   fi
