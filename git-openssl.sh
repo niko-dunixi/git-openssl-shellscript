@@ -12,7 +12,7 @@ do
     BUILDDIR="${i#*=}"
     shift
     ;;
-    -skipinstall|--skip-install) # Skip dbkg install
+    -skipinstall|--skip-install) # Skip dpkg install
     SKIPINSTALL=YES
     ;;
     *)
