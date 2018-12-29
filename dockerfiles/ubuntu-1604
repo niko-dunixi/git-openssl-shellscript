@@ -1,4 +1,9 @@
 FROM ubuntu:16.04
 RUN apt update && \
-  apt -y install sudo && \
-  rm -rf /var/lib/apt/lists/*
+  apt -y install sudo
+
+RUN apt install build-essential autoconf libcurl4-openssl-dev \
+  tcl-dev gettext asciidoc docbook2x install-info \
+  libexpat1-dev libz-dev -y
+
+# Note, I'm intentionally not running 'rm -rf /var/lib/apt/lists/*' to help speed up test time of the script which will re-generate those caches.
