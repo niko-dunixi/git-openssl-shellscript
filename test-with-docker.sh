@@ -35,9 +35,9 @@ sleep 5s
 
 temp_directory=$(mktemp -d)
 results_file="${temp_directory}/test-results.txt"
-green="\033[0;32m"
-red="\033[0;31m"
-no_color="\033[0m"
+# green="\033[0;32m"
+# red="\033[0;31m"
+# no_color="\033[0m"
 script_file="git-openssl.sh"
 
 function test_script_on_distro()
@@ -46,11 +46,13 @@ function test_script_on_distro()
   tested_ubuntu_container="ubuntu:${tested_ubuntu_version}-with-sudo"
   echo "${green}Testing with: ${red}${tested_ubuntu_container}${no_color}"
   if docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-on-${tested_ubuntu_version}" "ubuntu:${tested_ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file} -skiptests"; then
-    echo "Worked on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
-    echo "${green}Worked on ubuntu:${tested_ubuntu_version}${no_color}"
+    echo "Worked on ubuntu:${tested_ubuntu_version}" | tee -a "${results_file}"
+    # echo "Worked on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
+    # echo "${green}Worked on ubuntu:${tested_ubuntu_version}${no_color}"
   else
-    echo "Failed on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
-    echo "${red}Failed on ubuntu:${tested_ubuntu_version}${no_color}"
+    echo "Failed on ubuntu:${tested_ubuntu_version}" | tee -a "${results_file}"
+    # echo "Failed on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
+    # echo "${red}Failed on ubuntu:${tested_ubuntu_version}${no_color}"
   fi
   sleep 2s
 }
