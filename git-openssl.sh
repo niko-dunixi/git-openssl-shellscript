@@ -50,9 +50,13 @@ sudo apt install libexpat1-dev libz-dev -y
 
 # Build it!
 make configure
-# Set the prefix based on this decision tree: https://i.stack.imgur.com/BlpRb.png
-# Not OS related, Is Software, Not From Package Manager, Has Dependencies, and Built From Source => /usr
-./configure --prefix=/usr
+# --prefix=/usr
+#    Set the prefix based on this decision tree: https://i.stack.imgur.com/BlpRb.png
+#    Not OS related, is software, not from package manager, has dependencies, and built from source => /usr
+# --with-openssl
+#    Running ripgrep on configure shows that --with-openssl is set by default. Since this could change in the
+#    future we do it explicitly
+./configure --prefix=/usr --with-openssl
 make 
 make all #doc info
 if [[ "${SKIPTESTS}" != "YES" ]]; then
