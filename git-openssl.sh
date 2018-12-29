@@ -2,8 +2,7 @@
 set -e
 
 # Gather command line options
-for i in "$@"
-do 
+for i in "$@"; do 
   case $i in 
     -skiptests|--skip-tests) # Skip tests portion of the build
     SKIPTESTS=YES
@@ -48,63 +47,20 @@ sudo apt install build-essential autoconf dh-autoreconf -y
 # Things for the git itself
 sudo apt install libcurl4-openssl-dev tcl-dev gettext asciidoc -y
 sudo apt install libexpat1-dev libz-dev -y
-# # This is where we actually change the library from one type to the other.
-# # sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control
-# # Compile time, itself, is long. Skips the tests. Do so at your own peril.
-# #sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
-# if [[ $SKIPTESTS == "YES" ]]
-# then
-#   sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
-# fi
-
 
 # Build it!
 make configure
 # Set the prefix based on this decision tree: https://i.stack.imgur.com/BlpRb.png
 # Not OS related, Is Software, Not From Package Manager, Has Dependencies, and Built From Source => /usr
-./configure --prefix=/usr --with-ssl
+./configure --prefix=/usr
+make 
 make all #doc info
-
-# Install
-if [[ -z $SKIPINSTALL ]]
-then 
-  make install #install-doc install-html install-info
+if [[ "${SKIPTESTS}" != "YES" ]]; then
+  make test
 fi
 
-# # Update and add depencencies
-# # sudo apt update
-# # sudo apt install software-properties-common dpkg-dev build-essential -y
-# # # Add the ppa for the most recent git
-# # if ! grep -q "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-# #   sudo add-apt-repository ppa:git-core/ppa --yes
-# # else
-# #   echo "git-core already in ppa"
-# # fi
-# # Download some more dependencies because dpgk complains:
-# # dpkg-checkbuilddeps: Unmet build dependencies: libpcre3-dev gettext libexpat1-dev subversion libsvn-perl libyaml-perl tcl libhttp-date-perl | libtime-modules-perl bzr python python-bzrlib cvs cvsps libdbd-sqlite3-perl unzip libio-pty-perl asciidoc xmlto docbook-xsl
-# # Install openssl development libraries
-# sudo apt install libcurl4-openssl-dev -y
-
-# # Get the source for git
-# cd "$(mktemp -d)"
-# apt-get source git
-# cd $(find -mindepth 1 -maxdepth 1 -type d -name "git-*")
-# pwd
-
-# # This is where we actually change the library from one type to the other.
-# sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control
-# # Compile time, itself, is long. Skips the tests. Do so at your own peril.
-# #sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
-# if [[ $SKIPTESTS == "YES" ]]
-# then
-#   sed -i -- '/TEST\s*=\s*test/d' ./debian/rules
-# fi
-
-# # Build it.
-# dpkg-buildpackage -rfakeroot -b
-
-# # Install
-# if [[ -z $SKIPINSTALL ]]
-# then 
-#   find .. -type f -name "git_*ubuntu*.deb" -exec sudo dpkg -i \{\} \;
-# fi
+# Install
+if [[ "${SKIPINSTALL}" != "YES" ]]; then 
+  make install #install-doc install-html install-info
+  git --version
+fi
