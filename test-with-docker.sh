@@ -4,6 +4,12 @@
 echo "Building testable ubuntu linux images... Fair warning, this will take a LONG time"
 sleep 5s
 declare -a ubuntu_versions=("14.04" "16.04" "18.04" "18.10" "19.04")
+function wait_for_jobs()
+{
+  for job_pid in $(jobs -p); do
+    wait "${job_pid}"
+  done
+}
 function build_containers()
 {
   for ubuntu_version in "${ubuntu_versions[@]}"; do
@@ -13,15 +19,13 @@ function build_containers()
     docker build -t "${ubuntu_container}" -f "dockerfiles/${dockerfile}" ./dockerfiles &
   done
   # Wait for all jobs to complete
-  for job_pid in $(jobs -p); do
-    wait "${job_pid}"
-  done
+  wait_for_jobs
 }
 time build_containers
 
 
 # Now working with the images individually so we can test the script on each container
-echo "Running script in each container"
+echo "Running script in each container, this will take even longer"
 sleep 5s
 
 temp_directory=$(mktemp -d)
@@ -30,19 +34,31 @@ green="\033[0;32m"
 red="\033[0;31m"
 no_color="\033[0m"
 script_file="git-openssl.sh"
-[ -f "${results_file} "] || rm "${results_file}"
-for ubuntu_version in "${ubuntu_versions[@]}"; do
-  ubuntu_container="ubuntu:${ubuntu_version}-with-sudo"
-  echo "Testing with ${ubuntu_container}"
-  docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-test" "ubuntu:${ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file} --skip-tests"
-  if [ "${?}" -ne 0 ]; then
-    # echo "${red}Failed on ubuntu:${ubuntu_version}${no_color}" | tee -a "${results_file}"
-    echo "Failed on ubuntu:${ubuntu_version}" >> "${results_file}"
+[[ -f "${results_file}" ]] || rm "${results_file}"
+
+function test_script_on_distro()
+{
+  tested_ubuntu_version="${1}"
+  tested_ubuntu_container="ubuntu:${tested_ubuntu_version}-with-sudo"
+  echo "Testing with ${tested_ubuntu_container}"
+  if docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-on-${tested_ubuntu_version}" "ubuntu:${tested_ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file}"; then
+    echo "Worked on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
   else
-    # echo "${green}Worked on ubuntu:${ubuntu_version}${no_color}" | tee -a "${results_file}"
-    echo "Worked on ubuntu:${ubuntu_version}" >> "${results_file}"
+    echo "Failed on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
   fi
-done
+}
+
+function test_all_distros()
+{
+  for ubuntu_version in "${ubuntu_versions[@]}"; do
+    test_script_on_distro "${ubuntu_version}" &
+  done
+  # Wait for all jobs to complete
+  wait_for_jobs
+}
+
+time test_all_distros
+
 printf "\nFinal Results:\n"
 cat "${results_file}"
 echo -e "${no_color}"
