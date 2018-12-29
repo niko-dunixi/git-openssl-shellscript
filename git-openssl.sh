@@ -64,7 +64,13 @@ if [[ "${SKIPTESTS}" != "YES" ]]; then
 fi
 
 # Install
-if [[ "${SKIPINSTALL}" != "YES" ]]; then 
+if [[ "${SKIPINSTALL}" != "YES" ]]; then
+  # If you have an apt managed version of git, remove it
+  if apt remove --purge git; then
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean
+  fi
+  # Install the version we just built
   make install #install-doc install-html install-info
-  git --version
+  echo "$(which git) -> $(git --version)"
 fi
