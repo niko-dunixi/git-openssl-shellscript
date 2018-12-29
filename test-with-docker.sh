@@ -7,7 +7,7 @@ declare -a ubuntu_versions=("14.04" "16.04" "18.04" "18.10" "19.04")
 function wait_for_jobs()
 {
   for job_pid in $(jobs -p); do
-    wait "${job_pid}" || true
+    wait "${job_pid}" 2>/dev/null || true
   done
 }
 function build_containers()
