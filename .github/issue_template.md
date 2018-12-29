@@ -3,7 +3,7 @@ title: 'Bug report'
 labels: bug
 ---
 
-## General troubleshooting:
+## Pre-Submission Checklist
 
 - [ ] Ran test-with-docker.sh for my version of Ubuntu
 - [ ] Read "[Open source DIY ethics](https://arp242.net/weblog/diy.html)"
