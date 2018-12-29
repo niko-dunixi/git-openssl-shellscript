@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-declare -a ubuntu_versions=("14.04" "16.04" "18.04" "18.10" "19.04")
+temp_directory=$(mkdir -d)
+cd "${temp_directory}"
+
+declare -a ubuntu_versions=("14.04") # "16.04" "18.04" "18.10" "19.04")
 green="\033[0;32m"
 red="\033[0;31m"
 no_color="\033[0m"
@@ -12,7 +15,7 @@ for ubuntu_version in "${ubuntu_versions[@]}"; do
   ubuntu_container="ubuntu:${ubuntu_version}-with-sudo"
   echo -e "${green}Building image... from file ${dockerfile} to create ${ubuntu_container}${no_color}"
   docker build -t "${ubuntu_container}" -f "dockerfiles/${dockerfile}" ./dockerfiles
-  docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-test" "ubuntu:${ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file}"
+  docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-test" "ubuntu:${ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file} --skip-tests"
   if [ "${?}" -ne 0 ]; then
     # echo "${red}Failed on ubuntu:${ubuntu_version}${no_color}" | tee -a "${results_file}"
     echo "Failed on ubuntu:${ubuntu_version}" >> "${results_file}"
