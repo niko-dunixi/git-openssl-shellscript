@@ -3,7 +3,7 @@ RUN apt update && \
   apt -y install sudo
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt install build-essential autoconf libcurl4-openssl-dev \
+RUN apt install build-essential autoconf dh-autoreconf libcurl4-openssl-dev \
   tcl-dev gettext asciidoc docbook2x install-info \
   libexpat1-dev libz-dev -y
 
