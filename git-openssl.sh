@@ -72,5 +72,6 @@ if [[ "${SKIPINSTALL}" != "YES" ]]; then
   fi
   # Install the version we just built
   make install #install-doc install-html install-info
-  echo "$(which git) -> $(git --version)"
+  echo "Make sure to refresh your shell!"
+  bash -c 'echo "$(ls -alh $(which git)) ($(git --version))"'
 fi
