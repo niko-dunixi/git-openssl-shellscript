@@ -41,9 +41,11 @@ function test_script_on_distro()
   tested_ubuntu_container="ubuntu:${tested_ubuntu_version}-with-sudo"
   echo "${green}Testing with: ${red}${tested_ubuntu_container}${no_color}"
   if docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-on-${tested_ubuntu_version}" "ubuntu:${tested_ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file}"; then
-    echo "Worked on ubuntu:${tested_ubuntu_version}" | tee -a "${results_file}"
+    echo "Worked on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
+    echo "${green}Worked on ubuntu:${tested_ubuntu_version}${no_color}"
   else
-    echo "Failed on ubuntu:${tested_ubuntu_version}" | tee -a "${results_file}"
+    echo "Failed on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
+    echo "${red}Failed on ubuntu:${tested_ubuntu_version}${no_color}"
   fi
   sleep 2s
 }
