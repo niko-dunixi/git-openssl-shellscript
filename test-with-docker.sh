@@ -7,7 +7,7 @@ declare -a ubuntu_versions=("14.04" "16.04" "18.04" "18.10" "19.04")
 function wait_for_jobs()
 {
   for job_pid in $(jobs -p); do
-    wait "${job_pid}"
+    wait "${job_pid}" || true
   done
 }
 function build_containers()
@@ -34,18 +34,18 @@ green="\033[0;32m"
 red="\033[0;31m"
 no_color="\033[0m"
 script_file="git-openssl.sh"
-[[ -f "${results_file}" ]] || rm "${results_file}"
 
 function test_script_on_distro()
 {
   tested_ubuntu_version="${1}"
   tested_ubuntu_container="ubuntu:${tested_ubuntu_version}-with-sudo"
-  echo "Testing with ${tested_ubuntu_container}"
+  echo "${green}Testing with: ${red}${tested_ubuntu_container}${no_color}"
   if docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-on-${tested_ubuntu_version}" "ubuntu:${tested_ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file}"; then
-    echo "Worked on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
+    echo "Worked on ubuntu:${tested_ubuntu_version}" | tee -a "${results_file}"
   else
-    echo "Failed on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
+    echo "Failed on ubuntu:${tested_ubuntu_version}" | tee -a "${results_file}"
   fi
+  sleep 2s
 }
 
 function test_all_distros()
@@ -56,7 +56,6 @@ function test_all_distros()
   # Wait for all jobs to complete
   wait_for_jobs
 }
-
 time test_all_distros
 
 printf "\nFinal Results:\n"
