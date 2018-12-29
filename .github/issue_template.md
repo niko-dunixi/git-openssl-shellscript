@@ -6,7 +6,7 @@ labels: bug
 ## General troubleshooting:
 
 - [ ] Ran test-with-docker.sh for my version of Ubuntu
-- [ ] Read "[Open source DIY ethics](https://arp242.net/weblog/diy.html)
+- [ ] Read "[Open source DIY ethics](https://arp242.net/weblog/diy.html)"
 
 ## Steps to Reproduce the problem:
 
