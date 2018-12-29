@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
 # Utilize concurrency to build all the docker containers we'll use to test with
+if [ ! -z "${ALL_DISTROS}" ]; then
+  declare -a ubuntu_versions=("18.04" "14.04" "16.04" "18.10" "19.04")
+else
+  declare -a ubuntu_versions=("18.04")
+fi
+echo "Will test on the following ubuntu-distros: ${ubuntu_versions[@]}"
 echo "Building testable ubuntu linux images... Fair warning, this will take a LONG time"
 sleep 5s
-declare -a ubuntu_versions=("14.04" "16.04" "18.04" "18.10" "19.04")
 function wait_for_jobs()
 {
   for job_pid in $(jobs -p); do
@@ -40,7 +45,7 @@ function test_script_on_distro()
   tested_ubuntu_version="${1}"
   tested_ubuntu_container="ubuntu:${tested_ubuntu_version}-with-sudo"
   echo "${green}Testing with: ${red}${tested_ubuntu_container}${no_color}"
-  if docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-on-${tested_ubuntu_version}" "ubuntu:${tested_ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file}"; then
+  if docker run -v "$(pwd):/src" --rm --name "git-openssl-shellscript-on-${tested_ubuntu_version}" "ubuntu:${tested_ubuntu_version}-with-sudo" /bin/bash -c "/src/${script_file} -skiptests"; then
     echo "Worked on ubuntu:${tested_ubuntu_version}" >> "${results_file}"
     echo "${green}Worked on ubuntu:${tested_ubuntu_version}${no_color}"
   else
