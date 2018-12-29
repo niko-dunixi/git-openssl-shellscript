@@ -38,7 +38,7 @@ results_file="${temp_directory}/test-results.txt"
 # green="\033[0;32m"
 # red="\033[0;31m"
 # no_color="\033[0m"
-script_file="git-openssl.sh"
+script_file="compile-git-with-openssl.sh"
 
 function test_script_on_distro()
 {

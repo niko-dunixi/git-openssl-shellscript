@@ -1,7 +1,7 @@
 # git-openssl-shellscript
 Shellscript to compile git with OpenSSL
 
-### git-openssl.sh
+### compile-git-with-openssl.sh
 
 There are at times when you need to use git with https instead of ssh (behind firewalls where ssh is not allowed but https is, for instance). There is a gnutls issue that prevents communication with some https behind such firewalls or unusual proxy configurations, etc. You will typically see an error such as this:
 ```
