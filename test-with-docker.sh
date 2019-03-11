@@ -9,14 +9,13 @@ fi
 echo "Will test on the following ubuntu-distros: ${ubuntu_versions[@]}"
 echo "Building testable ubuntu linux images... Fair warning, this will take a LONG time"
 sleep 5s
-function wait_for_jobs()
-{
+function wait_for_jobs() {
   for job_pid in $(jobs -p); do
     wait "${job_pid}" 2>/dev/null || true
   done
 }
-function build_containers()
-{
+
+function build_containers() {
   for ubuntu_version in "${ubuntu_versions[@]}"; do
     dockerfile="ubuntu-${ubuntu_version//\.}"
     ubuntu_container="ubuntu:${ubuntu_version}-with-sudo"
@@ -40,8 +39,7 @@ results_file="${temp_directory}/test-results.txt"
 # no_color="\033[0m"
 script_file="compile-git-with-openssl.sh"
 
-function test_script_on_distro()
-{
+function test_script_on_distro() {
   tested_ubuntu_version="${1}"
   tested_ubuntu_container="ubuntu:${tested_ubuntu_version}-with-sudo"
   echo "${green}Testing with: ${red}${tested_ubuntu_container}${no_color}"
@@ -57,8 +55,7 @@ function test_script_on_distro()
   sleep 2s
 }
 
-function test_all_distros()
-{
+function test_all_distros() {
   for ubuntu_version in "${ubuntu_versions[@]}"; do
     test_script_on_distro "${ubuntu_version}" &
   done
