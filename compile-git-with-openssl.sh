@@ -37,7 +37,7 @@ tar -xf "git-source.tar.gz" --strip 1
 
 # Source dependencies
 # Don't use gnutls, this is the problem package.
-sudo apt remove --purge libcurl4-gnutls-dev || true
+sudo apt remove --purge libcurl4-gnutls-dev -y || true
 # Using apt-get for these commands, they're not supported with the apt alias on 14.04 (but they may be on later systems)
 sudo apt-get autoremove -y
 sudo apt-get autoclean
@@ -65,7 +65,7 @@ fi
 # Install
 if [[ "${SKIPINSTALL}" != "YES" ]]; then
   # If you have an apt managed version of git, remove it
-  if apt remove --purge git; then
+  if apt remove --purge git -y; then
     sudo apt-get autoremove -y
     sudo apt-get autoclean
   fi
