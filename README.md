@@ -5,7 +5,7 @@ Shellscript to compile git with OpenSSL
 
 There are at times when you need to use git with https instead of ssh (behind firewalls where ssh is not allowed but https is, for instance). There is a gnutls issue that prevents communication with some https behind such firewalls or unusual proxy configurations, etc. You will typically see an error such as this:
 ```
-fatal: unable to access 'http://you@path.to/arbitrary/repository/git-openssl-shellscript.git': gnutls_handshake() failed: Illegal parameter
+fatal: unable to access 'http://you@path.to/arbitrary/repository.git': gnutls_handshake() failed: Illegal parameter
 ```
 The only way to resolve this is by re-compiling git with `openssl` instead of `gnutls`.
 
