@@ -57,7 +57,6 @@ make configure
 #    future we do it explicitly
 ./configure --prefix=/usr --with-openssl
 make 
-make all #doc info
 if [[ "${SKIPTESTS}" != "YES" ]]; then
   make test
 fi
