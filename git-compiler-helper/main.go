@@ -22,5 +22,5 @@ func main() {
 	if len(versions) == 0 {
 		log.Fatalln("no versions were found when scraping github")
 	}
-	fmt.Println(versions[len(versions)-1])
+	fmt.Printf("https://www.github.com%s\n", versions[len(versions)-1])
 }
