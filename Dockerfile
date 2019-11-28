@@ -19,11 +19,9 @@ COPY --from=git-compiler-helper \
 RUN /root/git-latest-url-finder.run > git-tar-url.txt && \
   echo "$(cat git-tar-url.txt)" && \
   curl -L --retry 5 --url "$(cat git-tar-url.txt)" --output "git-source.tar.gz" && \
-  # curl -o "git-source.tar.gz" && \
   tar -xf "git-source.tar.gz" --strip 1
 RUN make configure
 RUN CFLAGS="-static" ./configure --with-openssl
 RUN make
-RUN ls ./*
-RUN cp ./git /bin/git
+RUN make install
 ENTRYPOINT [ "git" ]
