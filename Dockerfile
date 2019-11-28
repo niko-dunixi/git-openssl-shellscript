@@ -11,13 +11,19 @@ RUN apt-get install build-essential autoconf dh-autoreconf -y
 RUN apt-get install libcurl4-openssl-dev tcl-dev gettext \
   asciidoc libexpat1-dev libz-dev -y
 RUN apt-get install curl -y
+RUN mkdir -p /root/src
+WORKDIR /root/src
 COPY --from=git-compiler-helper \
   /root/git-latest-url-finder.run \
-  /bin/git-latest-url-finder.run
-RUN curl -L --retry 5 --url "$(/bin/git-latest-url-finder.run)" --output "git-source.tar.gz" && \
+  /root/git-latest-url-finder.run
+RUN /root/git-latest-url-finder.run > git-tar-url.txt && \
+  echo "$(cat git-tar-url.txt)" && \
+  curl -L --retry 5 --url "$(cat git-tar-url.txt)" --output "git-source.tar.gz" && \
+  # curl -o "git-source.tar.gz" && \
   tar -xf "git-source.tar.gz" --strip 1
 RUN make configure
-RUN ./configure --with-openssl
+RUN CFLAGS="-static" ./configure --with-openssl
 RUN make
-COPY ./git /bin/git
+RUN ls ./*
+RUN cp ./git /bin/git
 ENTRYPOINT [ "git" ]
