@@ -69,7 +69,7 @@ if [[ "${SKIPINSTALL}" != "YES" ]]; then
     sudo apt-get autoclean
   fi
   # Install the version we just built
-  make install #install-doc install-html install-info
+  sudo make install #install-doc install-html install-info
   echo "Make sure to refresh your shell!"
   bash -c 'echo "$(which git) ($(git --version))"'
 fi
