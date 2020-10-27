@@ -64,7 +64,7 @@ fi
 # Install
 if [[ "${SKIPINSTALL}" != "YES" ]]; then
   # If you have an apt managed version of git, remove it
-  if apt remove --purge git -y; then
+  if sudo apt remove --purge git -y; then
     sudo apt-get autoremove -y
     sudo apt-get autoclean
   fi
