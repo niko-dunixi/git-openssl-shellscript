@@ -49,15 +49,15 @@ RUN make configure; \
     make;
 # create debian package
 RUN checkinstall \
-        --default \
-        --type=debian \
-        --pkgname=git-openssl \
-        --pkgversion=$(./git --version | cut -d " " -f 3) \
-        --pkgarch=$(dpkg --print-architecture) \
-        --conflicts=git \
-        --requires="libcurl4,zlib1g \(\>= 1:1.2.0\),perl,libpcre3,libexpat1 \(\>= 2.0.1\),liberror-perl,libc6" \
-        --recommends="less,patch,ssh-client,ca-certificates" \
-        make install;
+    --default \
+    --type=debian \
+    --pkgname=git-openssl \
+    --pkgversion=$(./git --version | cut -d " " -f 3) \
+    --pkgarch=$(dpkg --print-architecture) \
+    --conflicts=git \
+    --requires="libcurl4,zlib1g \(\>= 1:1.2.0\),perl,libpcre3,libexpat1 \(\>= 2.0.1\),liberror-perl,libc6" \
+    --recommends="less,patch,ssh-client,ca-certificates" \
+    make install;
 # move created .deb file to a more scriptable filename
 RUN cp -v ./git-openssl_$(./git --version | cut -d " " -f 3)-1_$(dpkg --print-architecture).deb /root/git-openssl.deb;
 
