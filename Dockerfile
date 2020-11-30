@@ -63,16 +63,26 @@ RUN cp -v ./git-openssl_$(./git --version | cut -d " " -f 3)-1_$(dpkg --print-ar
 
 # install package on plain ubuntu
 FROM ubuntu:latest
+# copy package from temporary image
 COPY --from=git-compiler \
     /root/git-openssl.deb \
     /root/git-openssl.deb
+# install package dependencies
 RUN apt-get update -qq -y; \
     apt-get install -qq -y --no-install-recommends \
         libcurl4 \
         perl \
         libexpat1 \
         liberror-perl \
-        ca-certificates; \
-    apt-get clean;
-RUN dpkg -i /root/git-openssl.deb
+        ca-certificates \
+        less \
+        patch \
+        ssh-client; \
+    apt-get clean; \
+    # install package
+    dpkg -i /root/git-openssl.deb; \
+    # create git config files
+    touch /root/.gitconfig /root/.git-credentials /etc/skel/.gitconfig /etc/skel/.git-credentials; \
+    # create 10 user- and group-IDs in case this image is run without privileges
+    bash -c 'for i in {1000..1010}; do groupadd -g ${i} -o "group${i}"; useradd -m -u ${i} -g ${i} -s /usr/bin/bash "user${i}"; done'
 ENTRYPOINT [ "git" ]
