@@ -68,7 +68,8 @@ COPY --from=git-compiler \
     /root/git-openssl.deb \
     /root/git-openssl.deb
 # install package dependencies
-RUN apt-get update -qq -y; \
+RUN set -xe; \
+    apt-get update -qq -y; \
     apt-get install -qq -y --no-install-recommends \
         libcurl4 \
         perl \
