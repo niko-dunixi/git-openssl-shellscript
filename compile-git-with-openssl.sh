@@ -30,7 +30,7 @@ cd "${BUILDDIR}"
 # Download the source tarball from GitHub
 sudo apt update
 sudo apt install curl -y
-git_tarball_url="https://www.github.com$(curl 'https://github.com/git/git/tags' | grep -o "/git/git/archive/v2\..*\.tar\.gz" | sort -r | head -1 | tr -d '\n')"
+git_tarball_url="https://www.github.com$(curl 'https://github.com/git/git/tags' | grep -o "/git/git/archive/refs/tags/v2\..*\.tar\.gz" | sort -r | head -1 | tr -d '\n')"
 echo "DOWNLOADING FROM: ${git_tarball_url}"
 curl -L --retry 5 "${git_tarball_url}" --output "git-source.tar.gz"
 tar -xf "git-source.tar.gz" --strip 1
