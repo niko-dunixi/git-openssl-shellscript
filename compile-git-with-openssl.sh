@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-set -e
-
+set -eu
 # Gather command line options
+SKIPTESTS=
+BUILDDIR=
+SKIPINSTALL=
 for i in "$@"; do 
   case $i in 
     -skiptests|--skip-tests) # Skip tests portion of the build
