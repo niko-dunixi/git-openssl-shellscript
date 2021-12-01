@@ -16,3 +16,4 @@ RUN usermod -aG sudo git-user
 RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER git-user
 WORKDIR /home/git-user
+ENTRYPOINT [ "/usr/bin/bash", "-c" ]
