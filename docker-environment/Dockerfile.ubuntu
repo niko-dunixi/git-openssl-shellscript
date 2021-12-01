@@ -13,6 +13,6 @@ RUN  apt-get install build-essential autoconf dh-autoreconf libcurl4-openssl-dev
 
 RUN useradd --create-home git-user
 RUN usermod -aG sudo git-user
-RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+RUN echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER git-user
 WORKDIR /home/git-user
