@@ -1,0 +1,35 @@
+---
+version: "3"
+services:
+  ubuntu_14.04:
+    build:
+      dockerfile: Dockerfile.ubuntu
+      args:
+        UBUNTU_VERSION: "14.04"
+    volumes:
+      - "../compile-git-with-openssl.sh:/home/git-user/compile-git-with-openssl.sh:ro"
+    command: "./compile-git-with-openssl.sh --skip-tests"
+  ubuntu_16.04:
+    build:
+      dockerfile: Dockerfile.ubuntu
+      args:
+        UBUNTU_VERSION: "16.04"
+    volumes:
+      - "../compile-git-with-openssl.sh:/home/git-user/compile-git-with-openssl.sh:ro"
+    command: "./compile-git-with-openssl.sh --skip-tests"
+  ubuntu_18.04:
+    build:
+      dockerfile: Dockerfile.ubuntu
+      args:
+        UBUNTU_VERSION: "18.04"
+    volumes:
+      - "../compile-git-with-openssl.sh:/home/git-user/compile-git-with-openssl.sh:ro"
+    command: "./compile-git-with-openssl.sh --skip-tests"
+  ubuntu_20.04:
+    build:
+      dockerfile: Dockerfile.ubuntu
+      args:
+        UBUNTU_VERSION: "20.04"
+    volumes:
+      - "../compile-git-with-openssl.sh:/home/git-user/compile-git-with-openssl.sh:ro"
+    command: "./compile-git-with-openssl.sh --skip-tests"
