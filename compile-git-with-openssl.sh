@@ -24,30 +24,29 @@ for i in "$@"; do
 done
 
 # Use the specified build directory, or create a unique temporary directory
+set -x
 BUILDDIR=${BUILDDIR:-$(mktemp -d)}
-echo "BUILD DIRECTORY USED: ${BUILDDIR}" 
 mkdir -p "${BUILDDIR}"
 cd "${BUILDDIR}"
 
 # Download the source tarball from GitHub
-sudo apt update
-sudo apt install curl -y
-git_tarball_url="https://www.github.com$(curl 'https://github.com/git/git/tags' | grep -o "/git/git/archive/refs/tags/v2\..*\.tar\.gz" | sort -r | head -1 | tr -d '\n')"
-echo "DOWNLOADING FROM: ${git_tarball_url}"
+sudo apt-get update
+sudo apt-get install curl jq -y
+git_tarball_url="$(curl --retry 5 "https://api.github.com/repos/git/git/tags" | jq -r '.[0].tarball_url')"
 curl -L --retry 5 "${git_tarball_url}" --output "git-source.tar.gz"
 tar -xf "git-source.tar.gz" --strip 1
 
 # Source dependencies
 # Don't use gnutls, this is the problem package.
-sudo apt remove --purge libcurl4-gnutls-dev -y || true
-# Using apt-get for these commands, they're not supported with the apt alias on 14.04 (but they may be on later systems)
-sudo apt-get autoremove -y
-sudo apt-get autoclean
+if sudo apt-get remove --purge libcurl4-gnutls-dev -y; then
+  # Using apt-get for these commands, they're not supported with the apt alias on 14.04 (but they may be on later systems)
+  sudo apt-get autoremove -y
+  sudo apt-get autoclean
+fi
 # Meta-things for building on the end-user's machine
-sudo apt install build-essential autoconf dh-autoreconf -y
+sudo apt-get install build-essential autoconf dh-autoreconf -y
 # Things for the git itself
-sudo apt install libcurl4-openssl-dev tcl-dev gettext asciidoc -y
-sudo apt install libexpat1-dev libz-dev -y
+sudo apt-get install libcurl4-openssl-dev tcl-dev gettext asciidoc libexpat1-dev libz-dev -y
 
 # Build it!
 make configure
@@ -65,13 +64,13 @@ fi
 
 # Install
 if [[ "${SKIPINSTALL}" != "YES" ]]; then
+  # Install the version we just built
+  sudo make install #install-doc install-html install-info
   # If you have an apt managed version of git, remove it
-  if sudo apt remove --purge git -y; then
+  if sudo apt-get remove --purge git -y; then
     sudo apt-get autoremove -y
     sudo apt-get autoclean
   fi
-  # Install the version we just built
-  sudo make install #install-doc install-html install-info
   echo "Make sure to refresh your shell!"
   bash -c 'echo "$(which git) ($(git --version))"'
 fi
