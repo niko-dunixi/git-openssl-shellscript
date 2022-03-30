@@ -64,13 +64,13 @@ fi
 
 # Install
 if [[ "${SKIPINSTALL}" != "YES" ]]; then
-  # Install the version we just built
-  sudo make install #install-doc install-html install-info
   # If you have an apt managed version of git, remove it
   if sudo apt-get remove --purge git -y; then
     sudo apt-get autoremove -y
     sudo apt-get autoclean
   fi
+  # Install the version we just built
+  sudo make install #install-doc install-html install-info
   echo "Make sure to refresh your shell!"
   bash -c 'echo "$(which git) ($(git --version))"'
 fi
